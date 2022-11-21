@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1025666694755",
+    "project_id": "envirolegal-4cdc9",
+    "storage_bucket": "envirolegal-4cdc9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025666694755:android:60f68a75e25b4afde30256",
+        "android_client_info": {
+          "package_name": "com.envirolegal.api"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025666694755-od8h2p691mpdomj3t1ci54v4m8v98amj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATgaltCFRHcFqU94z8mTo0h5WvFnDmOo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025666694755-od8h2p691mpdomj3t1ci54v4m8v98amj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
