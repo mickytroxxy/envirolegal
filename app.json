@@ -52,6 +52,9 @@
         "googleMaps": {
           "apiKey": "AIzaSyALlGfOwa0WOlQk9MgXIB6vW0YH2tmi0EA"
         },
+        "googleSignIn": {
+          "apiKey": "AIzaSyATgaltCFRHcFqU94z8mTo0h5WvFnDmOo0"
+        },
         "googleMobileAdsAppId": "ca-app-pub-7273251331335061~4202453362"
       }
     },

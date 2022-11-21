@@ -32,7 +32,7 @@ const KeyRef = ({navigation}) =>{
 export default React.memo(KeyRef);
 
 const HeaderSection = () =>{
-    const {appState:{accountInfo,logout,notificationToken}} = useContext(AppContext);
+    const {appState:{accountInfo,logout,notificationToken,showToast}} = useContext(AppContext);
     React.useEffect(() => {
         loginApi(accountInfo?.emailAddress,accountInfo?.password,(response) => {
             if(!response.success){

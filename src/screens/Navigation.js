@@ -13,6 +13,10 @@ import Profile from './Profile';
 import Entry from './Entry';
 import NotificationScreen from './NotificationScreen';
 import SubmitNotification from './SubmitNotification';
+import WebBrowser from './WebBrowser';
+import Page1 from './Page1';
+import Page2 from './Page2';
+import Content from './Content';
 
 const RootStack = createStackNavigator();
 const Navigation = props => {
@@ -76,6 +80,22 @@ const Navigation = props => {
         <RootStack.Screen
           name="SubmitNotification"
           component={SubmitNotification}
+        />
+        <RootStack.Screen
+          name="WebBrowser"
+          component={WebBrowser}
+        />
+        <RootStack.Screen
+          name="Page1"
+          component={Page1}
+        />
+        <RootStack.Screen
+          name="Page2"
+          component={Page2}
+        />
+        <RootStack.Screen
+          name="Content"
+          component={Content}
         />
       </RootStack.Navigator>
     </NavigationContainer>

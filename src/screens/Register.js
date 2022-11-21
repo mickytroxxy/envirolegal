@@ -62,7 +62,7 @@ const PageContent = ({navigation}) =>{
 
     return(
       <View style={styles.container}>
-        <LinearGradient colors={["#fff","#fff","#fff","green"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
+        <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
             <ScrollView style={{padding:10}}>
               <View style={{alignItems:'center'}}>
                 <Image source={require('../../assets/logo1.png')} style={{width:'80%',height:120}}/>

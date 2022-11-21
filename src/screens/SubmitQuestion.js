@@ -43,7 +43,7 @@ const PageContent = ({navigation}) =>{
     }
     return(
         <View style={styles.container}>
-            <LinearGradient colors={["#fff","#fff","#fff","green"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
+            <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
                 <ScrollView style={{padding:10}}>
                     <AisInput attr={{field:'subject',icon:{name:'list',type:'Feather',min:5,color:'#5586cc'},keyboardType:null,placeholder:'Title...',color:'#009387',handleChange}} />
                     <AisInput attr={{field:'body',icon:{name:'list',type:'Feather',min:5,color:'#5586cc'},keyboardType:null,placeholder:'Type your question...',color:'#009387',height:100,handleChange}} />

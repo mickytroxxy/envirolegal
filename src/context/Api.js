@@ -50,6 +50,15 @@ export const getNotifications = async (cb) => {
         cb(e);
     }
 }
+export const getContentInfo = async (cb) => {
+    try {
+        const querySnapshot = await getDocs(query(collection(db, "contentInfo")));
+        const data = querySnapshot.docs.map(doc => doc.data());
+        cb(data[0])
+    } catch (e) {
+        cb(e);
+    }
+}
 export const getNotificationTokens = async (cb) => {
     try {
         const querySnapshot = await getDocs(query(collection(db, "notificationTokens")));

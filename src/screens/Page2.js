@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, {useState,useContext } from "react";
 import { StyleSheet, View, SafeAreaView ,Linking,ScrollView, Platform,TouchableOpacity,Text,TextInput} from "react-native";
-import {MaterialCommunityIcons,AntDesign,Feather } from "@expo/vector-icons";
+import {MaterialCommunityIcons,AntDesign,Feather,Ionicons, FontAwesome } from "@expo/vector-icons";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppContext } from '../context/AppContext';
@@ -9,10 +9,10 @@ import AisInput from '../components/forms/AisInput';
 import { WebView } from 'react-native-webview';
 import { LoadCategory } from '../context/Api';
 const RootStack = createStackNavigator();
-let searchResults;
-const AboutApp = ({navigation,route}) =>{
+let selectedPage;
+const Page2 = ({navigation,route}) =>{
     const {appState:{fontFamilyObj,aboutHeader}} = useContext(AppContext);
-    searchResults = route?.params
+    selectedPage = route?.params
     return(
         <RootStack.Navigator screenOptions={{headerStyle: {elevation: 1,shadowOpacity: 0,backgroundColor: "#fff",borderBottomWidth: 0},headerTintColor: "#fff",headerTitleStyle: { fontWeight: "bold" }}}>
         <RootStack.Screen name="AddItemScreen" component={PageContent} options={{
@@ -31,16 +31,10 @@ const AboutApp = ({navigation,route}) =>{
     )
 };
 const PageContent = ({navigation}) =>{
-    const {appState:{setAboutHeader,aboutHeader,contentInfo,selectedPage,setSelectedPage,fontFamilyObj:{fontBold,fontLight}} } = useContext(AppContext);
+    const {appState:{setAboutHeader,aboutHeader,contentInfo,setSelectedPage,fontFamilyObj:{fontBold,fontLight}} } = useContext(AppContext);
     const [htmlContent,setHtmlContent] = useState(null);
+
     const [keyWord,setKeyWord] = useState("");
-    React.useEffect(() => {
-        if(searchResults){
-            const {val1,val2,val3,val4} = searchResults.contentValue;
-            LoadCategory(val1,val2,val3,val4,(response) => setHtmlContent(response))
-        }
-        setSelectedPage(contentInfo?.filter(item => item.header === aboutHeader.toUpperCase())[0])
-    },[])
     function onMessage(message) {
         const info = message.nativeEvent.data;
         if(message.nativeEvent.data === "submitYourQuestion"){
@@ -53,35 +47,32 @@ const PageContent = ({navigation}) =>{
         <View style={styles.container}>
             <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
                 {!htmlContent && <ScrollView style={{padding:10,paddingBottom:50,borderRadius:10,borderWidth:1,borderColor:'#757575',margin:10}}>
-                    <View style={{paddingBottom:80}}>
-                        <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
-                            if(value.length > 1){
-                                setKeyWord(value)
-                            }else{
-                                setKeyWord("")
+                    <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
+                        if(value.length > 1){
+                            setKeyWord(value)
+                        }else{
+                            setKeyWord("")
+                        }
+                    }}} />
+                    {selectedPage?.list.map((item,i) => 
+                        {
+                            if(item.header.toUpperCase().includes(keyWord.toUpperCase()) || keyWord === ""){
+                                return(
+                                    <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
+                                        setAboutHeader(item.header);
+                                        if(!item.list){
+                                            setHtmlContent(null)
+                                            navigation.navigate("Content",item)
+                                            //LoadCategory(item.contentValue.val1,item.contentValue.val2,item.contentValue.val3,item.contentValue.val4,(response) => setHtmlContent(response))
+                                        }
+                                    }}>
+                                        <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{item.header}</Text>
+                                        <AntDesign name='right' color={"#757575"} size={18}></AntDesign>
+                                    </TouchableOpacity>
+                                )
                             }
-                        }}} />
-                        {selectedPage?.list.map((item,i) => 
-                            {
-                                if(item.header.toUpperCase().includes(keyWord.toUpperCase()) || keyWord === ""){
-                                    return(
-                                        <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
-                                            setAboutHeader(item.header);
-                                            if(!item.list){
-                                                setHtmlContent(null)
-                                                navigation.navigate("Content",item)
-                                            }else{
-                                                navigation.navigate("Page1",item);
-                                            }
-                                        }}>
-                                            <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{item.header}</Text>
-                                            <AntDesign name='right' color={"#757575"} size={18}></AntDesign>
-                                        </TouchableOpacity>
-                                    )
-                                }
-                            }
-                        )}
-                    </View>
+                        }
+                    )}
                 </ScrollView>}
                 {htmlContent && <WebView source={{ html: `
                 <!DOCTYPE html><html>
@@ -105,7 +96,7 @@ const PageContent = ({navigation}) =>{
         </View>
     )
 };
-export default AboutApp;
+export default Page2;
 const styles = StyleSheet.create({
     searchInputHolder:{
         height:40,

@@ -13,6 +13,7 @@ import axios from 'axios';
 
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import { createData, getContentInfo } from './Api';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -31,189 +32,10 @@ export const AppProvider = (props) =>{
     const [modalState,setModalState] = useState({isVisible:false,attr:{headerText:'HEADER TEXT'}})
     const [confirmDialog,setConfirmDialog] = useState({isVisible:false,text:'Would you like to come today for a fist?',okayBtn:'VERIFY',cancelBtn:'CANCEL',isSuccess:false})
     const [currentLocation,setCurrentLocation] = useState(null);
-    const [notificationToken,setNotificationToken] = useState("")
+    const [notificationToken,setNotificationToken] = useState("");
+    const [selectedPage,setSelectedPage] = useState(null);
     const [countryData,setCountryData] = useState({dialCode:'+27',name:'South Africa',flag:'https://cdn.kcak11.com/CountryFlags/countries/za.svg'})
-    const [contentInfo,setContentInfo] = useState([
-        {
-            header:'ABOUT APP',
-            list:[
-                {header:'WELCOME',contentValue:{val1:1,val2:1,val3:false,val4:true}},
-                {header:'TERMS & CONDITIONS',contentValue:{val1:1,val2:2,val3:false,val4:true}}
-            ]
-        },
-        {
-            header:'KEY OBLIGATIONS',
-            list:[
-                {header:'AIR',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:5,val2:5,val3:false,val4:true}},
-                    {header:'REGISTRATION',contentValue:{val1:5,val2:6,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:5,val2:7,val3:false,val4:true}},
-                    {header:'SUBMISSIONS & NOTIFICATIONS',contentValue:{val1:5,val2:8,val3:false,val4:true}}
-                ]},
-                {header:'WATER',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:6,val2:33,val3:false,val4:true}},
-                    {header:'REGISTRATION',contentValue:{val1:6,val2:34,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:6,val2:35,val3:false,val4:true}},
-                    {header:'SUBMISSIONS & NOTIFICATIONS',contentValue:{val1:6,val2:36,val3:false,val4:true}}
-                ]},
-                {header:'WASTE',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:7,val2:29,val3:false,val4:true}},
-                    {header:'REGISTRATION',contentValue:{val1:7,val2:30,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:7,val2:31,val3:false,val4:true}},
-                    {header:'SUBMISSIONS & NOTIFICATIONS',contentValue:{val1:7,val2:32,val3:false,val4:true}}
-                ]},
-                {header:'HAZ SUBSTANCES',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:8,val2:38,val3:false,val4:true}},
-                    {header:'REGISTRATION',contentValue:{val1:8,val2:39,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:8,val2:40,val3:false,val4:true}},
-                    {header:'SUBMISSIONS & NOTIFICATIONS',contentValue:{val1:8,val2:41,val3:false,val4:true}}
-                ]},
-                {header:'PROTECTED SPECIES',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:9,val2:43,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:9,val2:44,val3:false,val4:true}},
-                ]},
-                {header:'ALIEN & INVADER SPECIES',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:10,val2:45,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:10,val2:46,val3:false,val4:true}},
-                ]},
-                {header:'INVIRO IMPACT ASSESSMENT (EIA)',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:48,val2:48,val3:false,val4:true}}
-                ]},
-                {header:'OTHER: ALL',list:[
-                    {header:'EA & EMPr AMENDMENTS',contentValue:{val1:49,val2:60,val3:false,val4:true}},
-                    {header:'HERITAGE RESOURCES',contentValue:{val1:49,val2:61,val3:false,val4:true}},
-                    {header:'VELD FIRE PREVENTION',contentValue:{val1:49,val2:62,val3:false,val4:true}},
-                    {header:'ENERGY INFORMATION',contentValue:{val1:49,val2:63,val3:false,val4:true}},
-                    {header:'ACCESS TO INFORMATION',contentValue:{val1:49,val2:64,val3:false,val4:true}},
-                    {header:'WHISLEBLOWER PROTECTION',contentValue:{val1:49,val2:65,val3:false,val4:true}},
-                ]},
-                {header:'OTHER MINING',list:[
-                    {header:'AUTHORISATIONS',contentValue:{val1:51,val2:92,val3:false,val4:true}},
-                    {header:'MINE CLOSURE',contentValue:{val1:51,val2:194,val3:false,val4:true}},
-                    {header:'OPERATIONAL REQUIREMENTS',contentValue:{val1:51,val2:108,val3:false,val4:true}},
-                    {header:'SUBMISSIONS & NOTIFICATIONS',contentValue:{val1:51,val2:109,val3:false,val4:true}}
-                ]},
-                {header:'CONSOLIDATED DATABASE A-Z',contentValue:{val1:1,val2:2,val3:false,val4:true}}
-            ]
-        },
-        {
-            header:'WEEKLY UPDATES',
-            list:[
-                {header:'Week 1 (24 Dec 21 - 7 Jan 22)',contentValue:{val1:3,val2:3,val3:false,val4:true}},
-                {header:'Week 2 (8 -14 January 2022)',contentValue:{val1:3,val2:4,val3:false,val4:true}},
-                {header:'Week 3 (15 - 21 January 2022)',contentValue:{val1:3,val2:82,val3:false,val4:true}},
-                {header:'Week 4 (22 - 28 January 2022)',contentValue:{val1:3,val2:83,val3:false,val4:true}},
-                {header:'Week 5 (29 Jan -  4 Feb 2022)',contentValue:{val1:3,val2:84,val3:false,val4:true}},
-                {header:'Week 6 (5 - 11 February 2022)',contentValue:{val1:3,val2:85,val3:false,val4:true}},
-                {header:'Week 7 (12-18 February 2022)',contentValue:{val1:3,val2:86,val3:false,val4:true}},
-                {header:'Week 8 (19 - 25 February 2022)',contentValue:{val1:3,val2:87,val3:false,val4:true}},
-                {header:'Week 9 (26 Feb - 4 March 2022)',contentValue:{val1:3,val2:88,val3:false,val4:true}},
-                {header:'Week 10 (5 - 11 March 2022)',contentValue:{val1:3,val2:89,val3:false,val4:true}},
-                {header:'Week 11 (12 - 18 March 2022)',contentValue:{val1:3,val2:90,val3:false,val4:true}},
-                {header:'Week 12 (19 -25 March 2022)',contentValue:{val1:3,val2:140,val3:false,val4:true}},
-                {header:'Week 13 (26 March - 1 April 2022)',contentValue:{val1:3,val2:141,val3:false,val4:true}},
-                {header:'Week 14  (2 - 8 April 2022)',contentValue:{val1:3,val2:161,val3:false,val4:true}},
-                {header:'Week 15  (9 - 15 April 2022)',contentValue:{val1:3,val2:162,val3:false,val4:true}},
-                {header:'Week 16 (16 - 22 April 2022)',contentValue:{val1:3,val2:163,val3:false,val4:true}},
-                {header:'Week 17 (23 - 29 April 2022)',contentValue:{val1:3,val2:164,val3:false,val4:true}},
-                {header:'Week 18 (30 April -  6 May 2022)',contentValue:{val1:3,val2:165,val3:false,val4:true}},
-                {header:'Week 19 (7 - 13 May 2022)',contentValue:{val1:3,val2:166,val3:false,val4:true}},
-                {header:'Week 20 (14 - 20  May 2022)',contentValue:{val1:3,val2:167,val3:false,val4:true}},
-                {header:'Week 21 (21 -  27 May  2022)',contentValue:{val1:3,val2:168,val3:false,val4:true}},
-                {header:'Week 22 (28 May-3 June 2022)',contentValue:{val1:3,val2:169,val3:false,val4:true}},
-                {header:'Week 23 (4 - 10 June 2022)',contentValue:{val1:3,val2:170,val3:false,val4:true}},
-                {header:'Week 24 (11- 17 June 2022)',contentValue:{val1:3,val2:171,val3:false,val4:true}},
-                {header:'Week 25  (18 - 24 June 2022)',contentValue:{val1:3,val2:172,val3:false,val4:true}},
-                {header:'Week  26 ( 25 June  - 1 July  2022)',contentValue:{val1:3,val2:173,val3:false,val4:true}},
-                {header:'Week  27 (2  - 8 July 2022)',contentValue:{val1:3,val2:174,val3:false,val4:true}},
-                {header:'Week 28 (9 - 15 July 2022)',contentValue:{val1:3,val2:175,val3:false,val4:true}},
-                {header:'Week  29 (16 - 22 July 2022)',contentValue:{val1:3,val2:176,val3:false,val4:true}},
-                {header:'Week 30 (23 - 29 July 2022)',contentValue:{val1:3,val2:177,val3:false,val4:true}},
-                {header:'Week 31 (30 July - 5 August 2022)',contentValue:{val1:3,val2:178,val3:false,val4:true}},
-                {header:'Week 32 (6 - 12 August 2022)',contentValue:{val1:3,val2:179,val3:false,val4:true}},
-                {header:'Week 33 (13 - 19 August 2022)',contentValue:{val1:3,val2:187,val3:false,val4:true}},
-                {header:'Week 34 (20 - 26 August 2022)',contentValue:{val1:3,val2:188,val3:false,val4:true}},
-                {header:'Week 35 (27 Aug -1 September 2022)',contentValue:{val1:3,val2:189,val3:false,val4:true}},
-                {header:'Week  36 (2 - 8 September 2022)',contentValue:{val1:3,val2:190,val3:false,val4:true}},
-                {header:'Week 37 (9 - 15 September 2022)',contentValue:{val1:3,val2:191,val3:false,val4:true}},
-                {header:'Week 38 (16 - 23 September 2022)',contentValue:{val1:3,val2:191,val3:false,val4:true}},
-                {header:'Week 39 (24 - 30 September 2022)',contentValue:{val1:3,val2:192,val3:false,val4:true}},
-                {header:'Week 40  (1 - 7 October 2022)',contentValue:{val1:3,val2:193,val3:false,val4:true}},
-                {header:'Week 41 ( 8 - 14 October 2022)',contentValue:{val1:3,val2:194,val3:false,val4:true}},
-                {header:'Week 42 (15 - 21 October 2022)',contentValue:{val1:3,val2:195,val3:false,val4:true}},
-                {header:'Week 43  (22 - 28 October 2022)',contentValue:{val1:3,val2:196,val3:false,val4:true}},
-                {header:'Week 44 (29 Oct - 4 Nov 2022)',contentValue:{val1:3,val2:207,val3:false,val4:true}},
-            ]
-        },
-        {
-            header:'PRACTICAL HELP',
-            list:[
-                {header:'AIR',list:[
-                    {header:'OZONE DEPLETION',contentValue:{val1:39,val2:119,val3:false,val4:false}},
-                    {header:'GREEN HOUSE EFFECT',contentValue:{val1:39,val2:120,val3:false,val4:false}},
-                    {header:'GHG ESTIMATION',contentValue:{val1:39,val2:121,val3:false,val4:false}}
-                ]},
-                {header:'WATER',list:[
-                    {header:'STORM WATER MONITORING',contentValue:{val1:60,val2:0,val3:false,val4:false}},
-                    {header:'WATER BALANCE',contentValue:{val1:61,val2:0,val3:false,val4:true}}
-                ]},
-                {header:'WASTE',list:[
-                    {header:'DEFINITION OF WASTE',contentValue:{val1:41,val2:78,val3:false,val4:true}},
-                    {header:'SANS 10234 CLASSIFICATION',contentValue:{val1:41,val2:81,val3:false,val4:true}},
-                    {header:'WASTE TYPE ASSESSMENT',contentValue:{val1:41,val2:103,val3:false,val4:true}},
-                    {header:'LANDFILL RESTRICTIONS',contentValue:{val1:41,val2:104,val3:false,val4:true}},
-                    {header:'OIL RECYCLERS CHECKLIST',contentValue:{val1:41,val2:105,val3:false,val4:true}},
-                    {header:'METAL RECYCLERS CHECKLIST',contentValue:{val1:41,val2:106,val3:false,val4:true}},
-                    {header:'WASTE MANIFEST',contentValue:{val1:41,val2:107,val3:false,val4:true}},
-                    {header:'TEMPLATE WASTE REGISTER',contentValue:{val1:41,val2:108,val3:false,val4:true}}
-                ]},
-                {header:'HAZ SUBSTANCES',list:[
-                    {header:'BANNED & RESTRICTED SUBSTANCES',contentValue:{val1:42,val2:112,val3:false,val4:true}},
-                    {header:'CHEMICAL STORAGE GUIDE',contentValue:{val1:42,val2:122,val3:false,val4:true}}
-                ]},
-                {header:'PROTECTED SPECIES',contentValue:{val1:43,val2:0,val3:false,val4:true}},
-                {header:'DECLARED INVADER SPECIES',contentValue:{val1:45,val2:0,val3:false,val4:true}},
-                {header:'MINING',contentValue:{val1:46,val2:0,val3:false,val4:true}}
-            ]
-        },
-        {
-            header:'HOT TOPICS',
-            list:[
-                {header:'Q1-2022 CHANGES UNPACKED',list:[
-                    {header:'ORGANIC WASTE TREATMENT',contentValue:{val1:64,val2:148,val3:false,val4:false}},
-                    {header:'CHEMICAL  MANUFACTURING',contentValue:{val1:64,val2:149,val3:false,val4:false}},
-                    {header:'CARBON TAX CHANGES',contentValue:{val1:64,val2:150,val3:false,val4:false}},
-                    {header:'NEW PROTECTED TREES',contentValue:{val1:64,val2:152,val3:false,val4:false}},
-                    {header:'NEW DECLARED WEED',contentValue:{val1:64,val2:153,val3:false,val4:false}},
-                    {header:'MOKOLO & MATLABAS CATCHMENT',contentValue:{val1:64,val2:155,val3:false,val4:false}},
-                    {header:'EAP REGISTRATION',contentValue:{val1:64,val2:156,val3:false,val4:false}},
-                    {header:'NEW MINING POLICIES',contentValue:{val1:64,val2:157,val3:false,val4:false}},
-                    {header:'PROPOSED CHANGES',contentValue:{val1:64,val2:158,val3:false,val4:false}},
-                    {header:'MINING & LANDOWNER`S CONSENT',contentValue:{val1:64,val2:168,val3:false,val4:false}}
-
-                ]},
-                {header:'Q1-2022 CHANGES UNPACKED',list:[
-                    {header:'CHEMICALS',contentValue:{val1:65,val2:181,val3:false,val4:false}},
-                    {header:'NEMA CHANGES',contentValue:{val1:65,val2:182,val3:false,val4:true}},
-                    {header:'NEM:WA CHANGES',contentValue:{val1:65,val2:183,val3:false,val4:true}},
-                    {header:'NEM:AQA CHANGES',contentValue:{val1:65,val2:185,val3:false,val4:true}},
-                    {header:'PROPOSED CHANGES',contentValue:{val1:65,val2:186,val3:false,val4:true}}
-                ]},
-                {header:'Q1-2022 CHANGES UNPACKED',list:[
-                    {header:'DISCHARGES INTO THE SEA',contentValue:{val1:66,val2:197,val3:false,val4:true}},
-                    {header:'POWERLINES & SUB. EA Exclusion',contentValue:{val1:66,val2:198,val3:false,val4:true}},
-                    {header:'EAP: NB AMENDMENTS - S 24H',contentValue:{val1:66,val2:199,val3:false,val4:true}},
-                    {header:'MINISTERIAL ADVISORS: AELs',contentValue:{val1:66,val2:200,val3:false,val4:true}},
-                    {header:'REV. BIODIVERSITY FRAMEWORK',contentValue:{val1:66,val2:201,val3:false,val4:true}},
-                    {header:'TESTING GREENER REFRIGERANTS',contentValue:{val1:66,val2:202,val3:false,val4:true}},
-                    {header:'BREEDE- GOURITS WMA: RESERVE',contentValue:{val1:66,val2:203,val3:false,val4:true}},
-                    {header:'Mzimvubu-Tsitsik: Water Resolution',contentValue:{val1:66,val2:204,val3:false,val4:true}},
-                    {header:'NEW BYLAWS',contentValue:{val1:66,val2:205,val3:false,val4:true}},
-                    {header:'PROPOSED CHANGES',contentValue:{val1:66,val2:206,val3:false,val4:true}}
-                ]}
-            ]
-        }
-    ])
+    const [contentInfo,setContentInfo] = useState(null)
     let customFonts = {
         'fontLight': require('..//../fonts/MontserratAlternates-Light.otf'),
         'fontBold': require('..//../fonts/MontserratAlternates-Bold.otf'),
@@ -223,14 +45,15 @@ export const AppProvider = (props) =>{
 
     const notificationListener = useRef();
     const responseListener = useRef();
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => openUserProfile(response.notification.request.content.data));
+    //responseListener.current = Notifications.addNotificationResponseReceivedListener(response => openUserProfile(response.notification.request.content.data));
     const lastNotification = Notifications.useLastNotificationResponse();
     lastNotificationResponse=lastNotification;
 
     React.useEffect(()=>{
         loadFontsAsync();
 
-        registerForPushNotificationsAsync(token => setNotificationToken(token));
+        registerForPushNotificationsAsync(accountInfo,token => setNotificationToken(token));
+        getContentInfo(response => setContentInfo(response.contentInfo))
         return () => {
             Notifications.removeNotificationSubscription(notificationListener);
             Notifications.removeNotificationSubscription(responseListener);
@@ -256,6 +79,7 @@ export const AppProvider = (props) =>{
             try {
                 const user = await AsyncStorage.getItem("user");
                 user && setAccountInfo(JSON.parse(user));
+                registerForPushNotificationsAsync(JSON.parse(user),token => setNotificationToken(token));
             } catch (e) {
                 showToast(e);
             }
@@ -295,7 +119,7 @@ export const AppProvider = (props) =>{
         }
     }
     const appState = {
-        accountInfo,notificationToken,pickCurrentLocation,nativeLink,checkGuestScan,saveScan,setAccountInfo,saveUser,logout,fontFamilyObj,setModalState,setConfirmDialog,getLocation,sendPushNotification,showToast,takePicture,pickImage,sendSms,phoneNoValidation,countryData,setCountryData,aboutHeader,setAboutHeader,contentInfo
+        accountInfo,notificationToken,selectedPage,setSelectedPage,pickCurrentLocation,nativeLink,checkGuestScan,saveScan,setAccountInfo,saveUser,logout,fontFamilyObj,setModalState,setConfirmDialog,getLocation,sendPushNotification,showToast,takePicture,pickImage,sendSms,phoneNoValidation,countryData,setCountryData,aboutHeader,setAboutHeader,contentInfo
     }
 
     return(
@@ -495,7 +319,7 @@ const sendPushNotification = async (to,title,body,data)=> {
         } catch (error) {}
     }
 }
-const registerForPushNotificationsAsync = async(cb)=> {
+const registerForPushNotificationsAsync = async(accountInfo,cb)=> {
     let token;
     if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -507,8 +331,16 @@ const registerForPushNotificationsAsync = async(cb)=> {
         if (finalStatus !== 'granted') {
             return;
         }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-        cb(token)
+        // token = (await Notifications.getExpoPushTokenAsync()).data;
+        // cb(token)
+        await Notifications.getExpoPushTokenAsync().then((res) => {
+            const notificationToken = res.data;
+            if(accountInfo){
+                const obj = {owner:accountInfo.emailAddress,notificationToken}
+                createData("notificationTokens",accountInfo.emailAddress,obj)
+            }
+            cb(notificationToken);
+        })
     } else {
       //alert('Must use physical device for Push Notifications');
     }

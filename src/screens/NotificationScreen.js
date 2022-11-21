@@ -44,7 +44,7 @@ const PageContent = ({navigation}) => {
     },[])
     return(
         <View style={styles.container}>
-            <LinearGradient colors={["#fff","#fff","#fff","#f1f7fa"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
+            <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
                 <ScrollView style={{padding:10}}>
                     <List.Section title="">
                         {(notitification && notitification.length > 0) ? notitification.map((item,i) => (

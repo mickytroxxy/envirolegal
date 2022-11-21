@@ -49,7 +49,7 @@ const PageContent = ({navigation,route}) =>{
     }
     return(
         <View style={styles.container}>
-            <LinearGradient colors={["#fff","#fff","#fff","#f1f7fa"]} style={{flex:1,paddingTop:10,borderRadius:10,alignContent:'center',alignItems:'center',justifyContent:'center',padding:20}}>
+            <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10,alignContent:'center',alignItems:'center',justifyContent:'center',padding:20}}>
                 <Text style={{fontFamily:fontLight,marginBottom:15,textAlign:'center'}}>We have sent the confirmation code to {obj.phoneNumber}!</Text>
                 <AisInput attr={{field:'search',icon:{name:'list',type:'Ionicons',min:5,color:'#5586cc'},keyboardType:null,placeholder:'Enter Confirmation Code',color:'#009387',handleChange:(field,value)=>{
                     setConfirmationCode(value)
