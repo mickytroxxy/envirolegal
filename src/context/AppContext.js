@@ -14,6 +14,7 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import { createData, getContentInfo } from './Api';
+import { contentData } from '../components/contentInfo';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -53,7 +54,9 @@ export const AppProvider = (props) =>{
         loadFontsAsync();
 
         registerForPushNotificationsAsync(accountInfo,token => setNotificationToken(token));
+        //setContentInfo(contentData)
         getContentInfo(response => setContentInfo(response.contentInfo))
+        createData("contentInfo","123456",{contentInfo:contentData})
         return () => {
             Notifications.removeNotificationSubscription(notificationListener);
             Notifications.removeNotificationSubscription(responseListener);

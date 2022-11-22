@@ -39,6 +39,7 @@ const PageContent = ({navigation}) =>{
             const {val1,val2,val3,val4} = searchResults.contentValue;
             LoadCategory(val1,val2,val3,val4,(response) => setHtmlContent(response))
         }
+        //LoadCategory(54,0,false,false,(response) => setHtmlContent(response))
         setSelectedPage(contentInfo?.filter(item => item.header === aboutHeader.toUpperCase())[0])
     },[])
     function onMessage(message) {
