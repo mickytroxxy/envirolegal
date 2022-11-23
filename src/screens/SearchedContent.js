@@ -9,7 +9,7 @@ import { WebView } from 'react-native-webview';
 import { LoadCategory } from '../context/Api';
 const RootStack = createStackNavigator();
 let searchResults;
-const Content = ({navigation,route}) =>{
+const SearchedContent = ({navigation,route}) =>{
     const {appState:{fontFamilyObj}} = useContext(AppContext);
     searchResults = route?.params
     return(
@@ -18,7 +18,7 @@ const Content = ({navigation,route}) =>{
             headerLeft: () => (
                 <Feather.Button backgroundColor="#fff" name="arrow-left-circle" size={28} color="#757575" onPress={()=>{navigation.goBack()}}></Feather.Button>
             ), 
-            title:searchResults?.header,
+            title:searchResults.title.toUpperCase(),
             headerTintColor: '#757575',
             headerTitleStyle: {
                 fontWeight: '900',
@@ -31,13 +31,6 @@ const Content = ({navigation,route}) =>{
 };
 const PageContent = ({navigation}) =>{
     const {appState:{fontFamilyObj:{fontBold,fontLight}} } = useContext(AppContext);
-    const [htmlContent,setHtmlContent] = useState(null);
-    React.useEffect(() => {
-        if(searchResults){
-            const {val1,val2,val3,val4} = searchResults.contentValue;
-            LoadCategory(val1,val2,val3,val4,(response) => setHtmlContent(response))
-        }
-    },[])
     function onMessage(message) {
         const info = message.nativeEvent.data;
         if(message.nativeEvent.data === "submitYourQuestion"){
@@ -49,7 +42,7 @@ const PageContent = ({navigation}) =>{
     return(
         <View style={styles.container}>
             <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
-                {htmlContent && <WebView source={{ html: `
+                {<WebView source={{ html: `
                 <!DOCTYPE html><html>
                 <head>
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,14 +57,14 @@ const PageContent = ({navigation}) =>{
                     }
                 </script>
                 <body>
-                    ${htmlContent}
+                    ${searchResults.body}
                 </body>
                 ` }} onMessage={onMessage}  />} 
             </LinearGradient>
         </View>
     )
 };
-export default Content;
+export default SearchedContent;
 const styles = StyleSheet.create({
     searchInputHolder:{
         height:40,

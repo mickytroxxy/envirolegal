@@ -32,6 +32,14 @@ export const loginApi = async (email,password,cb) => {
         cb(e);
     }
 }
+export const searchApi = async (key_word,cb) => {
+    try {
+        const res = await axios.get(`https://app.envirolegalapp.co.za/mobile/search?key_word=${key_word}`);
+        cb(res.data)
+    } catch (e) {
+        cb(e);
+    }
+}
 export const registerApi = async (obj,cb) => {
     try {
         const {fname,lname,emailAddress,password,landline,deviceid,phoneNumber} = obj;

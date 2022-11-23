@@ -53,7 +53,16 @@ export const contentData = [
                 "val2": 8,
                 "val4": true
               },
-              "header": "SUBMISSIONS /NOTIFICATIONS"
+              "header": "SUBMISSIONS & NOTIFICATIONS"
+            },
+            {
+              "contentValue": {
+                "val3": false,
+                "val1": 5,
+                "val2": 7,
+                "val4": true
+              },
+              "header": "OPERATIONAL REQUIREMENTS"
             }
           ]
         },

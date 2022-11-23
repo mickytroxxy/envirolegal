@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React,{useState,useContext} from 'react';
-import { Text, View, Dimensions, ScrollView, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { Text, View, Dimensions, ScrollView, StyleSheet, TouchableOpacity, Image, ImageBackground, Platform } from 'react-native';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import { AppContext } from "../context/AppContext";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -44,9 +44,11 @@ const HeaderSection = () =>{
         })
     },[])
     return(
-        <ImageBackground source={require('../../assets/bg2.jpg')} resizeMode="cover" style={styles.image}>
+        <View style={{backgroundColor:"#A2DDF3",height:600}}>
+            <ImageBackground source={require('../../assets/bg3.png')} resizeMode="cover" style={styles.image}>
             
-        </ImageBackground>
+            </ImageBackground>
+        </View>
     )
 }
 const Foreground = (props) =>{
@@ -144,8 +146,7 @@ const BodySection = (props) =>{
         if(btn === 'Submit Question'){
             navigation.navigate("SubmitQuestion")
         }else{
-            navigation.navigate("AboutApp")
-            setAboutHeader(btn)
+            navigation.navigate("AboutApp",btn)
         }
     }
     return(
@@ -161,23 +162,26 @@ const BodySection = (props) =>{
                     )
                 })}
             </View>
+            <View  style={{alignContent:'center',alignItems:'center', alignItems: 'center'}}>
+                <Image source={require('../../assets/logo1.png')} style={{width:'80%',height:120}}/>
+            </View>
         </LinearGradient>
     )
 }
 
 const render_btn_icons = btn =>{
   if(btn === 'About App'){
-    return <AntDesign size={60} name="infocirlceo" color="#fff" />
+    return <AntDesign size={60} name="infocirlceo" color="rgba(0, 0, 0, 0.7)" />
   }else if(btn === 'Key Obligations'){
-    return <FontAwesome name='sort-alpha-asc' color='#fff' size={60} />
+    return <FontAwesome name='sort-alpha-asc' color='rgba(0, 0, 0, 0.7)' size={60} />
   }else if(btn === 'Weekly Updates'){
-    return <Ionicons name='notifications-outline' color='#fff' size={60} />
+    return <Ionicons name='notifications-outline' color='rgba(0, 0, 0, 0.7)' size={60} />
   }else if(btn === 'Submit Question'){
-    return <AntDesign name='questioncircleo' color='#fff' size={60} />
+    return <AntDesign name='questioncircleo' color='rgba(0, 0, 0, 0.7)' size={60} />
   }else if(btn === 'Practical Help'){
-    return <Feather name='target' color='#fff' size={60} />
+    return <Feather name='target' color='#rgba(0, 0, 0, 0.7)' size={60} />
   }else if(btn === 'Hot Topics'){
-    return <FontAwesome name='lightbulb-o' color='#fff' size={60} />
+    return <FontAwesome name='lightbulb-o' color='rgba(0, 0, 0, 0.7)' size={60} />
   }
 }
 const styles = StyleSheet.create({
@@ -233,8 +237,9 @@ const styles = StyleSheet.create({
     },
     image: {
         justifyContent: "center",
-        backgroundColor:'#ccc',width:'100%',
-        height:450,alignItems:'center',
+        backgroundColor:'#A2DDF3',width:'100%',
+        height:Platform.OS === 'ios' ? 380 : 320,
+        alignItems:'center',
         alignContent:'center',
         justifyContent:'center'
     }

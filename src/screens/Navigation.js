@@ -17,6 +17,7 @@ import WebBrowser from './WebBrowser';
 import Page1 from './Page1';
 import Page2 from './Page2';
 import Content from './Content';
+import SearchedContent from './SearchedContent';
 
 const RootStack = createStackNavigator();
 const Navigation = props => {
@@ -96,6 +97,10 @@ const Navigation = props => {
         <RootStack.Screen
           name="Content"
           component={Content}
+        />
+        <RootStack.Screen
+          name="SearchedContent"
+          component={SearchedContent}
         />
       </RootStack.Navigator>
     </NavigationContainer>

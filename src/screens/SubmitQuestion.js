@@ -47,7 +47,7 @@ const PageContent = ({navigation}) =>{
                 <ScrollView style={{padding:10}}>
                     <AisInput attr={{field:'subject',icon:{name:'list',type:'Feather',min:5,color:'#5586cc'},keyboardType:null,placeholder:'Title...',color:'#009387',handleChange}} />
                     <AisInput attr={{field:'body',icon:{name:'list',type:'Feather',min:5,color:'#5586cc'},keyboardType:null,placeholder:'Type your question...',color:'#009387',height:100,handleChange}} />
-                    <TouchableOpacity onPress={sendEmail} style={{marginTop:30,width:'90%',marginLeft:'5%',backgroundColor:'green',padding:20,borderRadius:5}}>
+                    <TouchableOpacity onPress={sendEmail} style={{marginTop:30,width:'90%',marginLeft:'5%',backgroundColor:'#2277BA',padding:20,borderRadius:5}}>
                         <Text style={{textAlign:'center',fontFamily:fontBold,color:'#fff'}}>SEND YOUR QUESTION</Text>
                     </TouchableOpacity>
                 </ScrollView>

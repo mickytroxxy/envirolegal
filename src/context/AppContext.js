@@ -37,6 +37,7 @@ export const AppProvider = (props) =>{
     const [selectedPage,setSelectedPage] = useState(null);
     const [countryData,setCountryData] = useState({dialCode:'+27',name:'South Africa',flag:'https://cdn.kcak11.com/CountryFlags/countries/za.svg'})
     const [contentInfo,setContentInfo] = useState(null)
+    const [apiSearch,setApiSearch] = useState(null)
     let customFonts = {
         'fontLight': require('..//../fonts/MontserratAlternates-Light.otf'),
         'fontBold': require('..//../fonts/MontserratAlternates-Bold.otf'),
@@ -56,7 +57,7 @@ export const AppProvider = (props) =>{
         registerForPushNotificationsAsync(accountInfo,token => setNotificationToken(token));
         //setContentInfo(contentData)
         getContentInfo(response => setContentInfo(response.contentInfo))
-        createData("contentInfo","123456",{contentInfo:contentData})
+        //createData("contentInfo","123456",{contentInfo:contentData})
         return () => {
             Notifications.removeNotificationSubscription(notificationListener);
             Notifications.removeNotificationSubscription(responseListener);
@@ -122,7 +123,7 @@ export const AppProvider = (props) =>{
         }
     }
     const appState = {
-        accountInfo,notificationToken,selectedPage,setSelectedPage,pickCurrentLocation,nativeLink,checkGuestScan,saveScan,setAccountInfo,saveUser,logout,fontFamilyObj,setModalState,setConfirmDialog,getLocation,sendPushNotification,showToast,takePicture,pickImage,sendSms,phoneNoValidation,countryData,setCountryData,aboutHeader,setAboutHeader,contentInfo
+        accountInfo,apiSearch,setApiSearch,notificationToken,selectedPage,setSelectedPage,pickCurrentLocation,nativeLink,checkGuestScan,saveScan,setAccountInfo,saveUser,logout,fontFamilyObj,setModalState,setConfirmDialog,getLocation,sendPushNotification,showToast,takePicture,pickImage,sendSms,phoneNoValidation,countryData,setCountryData,aboutHeader,setAboutHeader,contentInfo
     }
 
     return(

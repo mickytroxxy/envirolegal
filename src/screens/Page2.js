@@ -7,11 +7,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { AppContext } from '../context/AppContext';
 import AisInput from '../components/forms/AisInput';
 import { WebView } from 'react-native-webview';
-import { LoadCategory } from '../context/Api';
+import { LoadCategory, searchApi } from '../context/Api';
 const RootStack = createStackNavigator();
 let selectedPage;
 const Page2 = ({navigation,route}) =>{
-    const {appState:{fontFamilyObj,aboutHeader}} = useContext(AppContext);
+    const {appState:{fontFamilyObj}} = useContext(AppContext);
     selectedPage = route?.params
     return(
         <RootStack.Navigator screenOptions={{headerStyle: {elevation: 1,shadowOpacity: 0,backgroundColor: "#fff",borderBottomWidth: 0},headerTintColor: "#fff",headerTitleStyle: { fontWeight: "bold" }}}>
@@ -19,7 +19,7 @@ const Page2 = ({navigation,route}) =>{
             headerLeft: () => (
                 <Feather.Button backgroundColor="#fff" name="arrow-left-circle" size={28} color="#757575" onPress={()=>{navigation.goBack()}}></Feather.Button>
             ), 
-            title:aboutHeader,
+            title:selectedPage?.header.toUpperCase(),
             headerTintColor: '#757575',
             headerTitleStyle: {
                 fontWeight: '900',
@@ -31,7 +31,7 @@ const Page2 = ({navigation,route}) =>{
     )
 };
 const PageContent = ({navigation}) =>{
-    const {appState:{setAboutHeader,aboutHeader,contentInfo,setSelectedPage,fontFamilyObj:{fontBold,fontLight}} } = useContext(AppContext);
+    const {appState:{apiSearch,setApiSearch,fontFamilyObj:{fontBold}} } = useContext(AppContext);
     const [htmlContent,setHtmlContent] = useState(null);
 
     const [keyWord,setKeyWord] = useState("");
@@ -47,19 +47,22 @@ const PageContent = ({navigation}) =>{
         <View style={styles.container}>
             <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
                 {!htmlContent && <ScrollView style={{padding:10,paddingBottom:50,borderRadius:10,borderWidth:1,borderColor:'#757575',margin:10}}>
-                    <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
-                        if(value.length > 1){
-                            setKeyWord(value)
-                        }else{
-                            setKeyWord("")
-                        }
-                    }}} />
-                    {selectedPage?.list.map((item,i) => 
+                <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
+                            if(value.length > 2){
+                                searchApi(value,(response) => {
+                                    if(response && !JSON.stringify(response).includes('AxiosError')){
+                                        setApiSearch(response)
+                                    }
+                                })
+                            }else{
+                                setApiSearch(null)
+                            }
+                        }}} />
+                    {!apiSearch && selectedPage?.list.map((item,i) => 
                         {
                             if(item.header.toUpperCase().includes(keyWord.toUpperCase()) || keyWord === ""){
                                 return(
                                     <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
-                                        setAboutHeader(item.header);
                                         if(!item.list){
                                             setHtmlContent(null)
                                             navigation.navigate("Content",item)
@@ -73,6 +76,22 @@ const PageContent = ({navigation}) =>{
                             }
                         }
                     )}
+                     {apiSearch && apiSearch?.data.map((item,i) => 
+                            {
+                                const data = JSON.parse(item)
+                                if(data.title !== undefined ){
+                                    return(
+                                        <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
+                                            navigation.navigate("SearchedContent",data)
+                                            //alert(data.title)
+                                        }}>
+                                            <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{data.title}</Text>
+                                            <AntDesign name='right' color={"#757575"} size={18}></AntDesign>
+                                        </TouchableOpacity>
+                                    )
+                                }
+                            }
+                        )}
                 </ScrollView>}
                 {htmlContent && <WebView source={{ html: `
                 <!DOCTYPE html><html>
