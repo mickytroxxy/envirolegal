@@ -64,7 +64,7 @@ const PageContent = ({navigation}) =>{
                 {!htmlContent && <ScrollView style={{padding:10,paddingBottom:50,borderRadius:10,borderWidth:1,borderColor:'#757575',margin:10}}>
                     <View style={{paddingBottom:80}}>
                         <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
-                            if(value.length > 2){
+                            if(value.length > 1){
                                 searchApi(value,(response) => {
                                     if(response && !JSON.stringify(response).includes('AxiosError')){
                                         setApiSearch(response)
@@ -81,7 +81,7 @@ const PageContent = ({navigation}) =>{
                                         <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
                                             if(!item.list){
                                                 setHtmlContent(null)
-                                                navigation.navigate("SearchedContent",item)
+                                                navigation.navigate("Content",item)
                                             }else{
                                                 navigation.navigate("Page1",item);
                                             }
@@ -100,7 +100,7 @@ const PageContent = ({navigation}) =>{
                                     return(
                                         <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
                                             navigation.navigate("SearchedContent",data)
-                                            //alert(data.title)
+                                            setApiSearch(null)
                                         }}>
                                             <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{data.title}</Text>
                                             <AntDesign name='right' color={"#757575"} size={18}></AntDesign>

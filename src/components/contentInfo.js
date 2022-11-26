@@ -1079,7 +1079,7 @@ export const contentData = [
           ]
         },
         {
-          "header": "Q1-2022 CHANGES UNPACKED",
+          "header": "Q2-2022 CHANGES UNPACKED",
           "list": [
             {
               "header": "CHEMICALS",
@@ -1221,7 +1221,7 @@ export const contentData = [
               "header": "PROPOSED CHANGES"
             }
           ],
-          "header": "Q1-2022 CHANGES UNPACKED"
+          "header": "Q2-2022 CHANGES UNPACKED"
         }
       ]
     }

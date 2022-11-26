@@ -41,6 +41,7 @@ export const AppProvider = (props) =>{
     let customFonts = {
         'fontLight': require('..//../fonts/MontserratAlternates-Light.otf'),
         'fontBold': require('..//../fonts/MontserratAlternates-Bold.otf'),
+        'fontNew': require('..//../fonts/Montserrat-BlackItalic.otf')
     };
 
     // notification part
@@ -65,7 +66,7 @@ export const AppProvider = (props) =>{
     },[]);
     const loadFontsAsync = async ()=> {
         await Font.loadAsync(customFonts);
-        setFontFamilyObj({fontLight:'fontLight',fontBold:'fontBold'})
+        setFontFamilyObj({fontLight:'fontLight',fontBold:'fontBold',fontNew:'fontNew'})
     }
     const getLocation = (cb)=>{
         if(currentLocation){

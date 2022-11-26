@@ -65,7 +65,7 @@ const PageContent = ({navigation}) =>{
         <LinearGradient colors={["#fff","#fff","#fff","#A2DDF3"]} style={{flex:1,paddingTop:10,borderRadius:10}}>
             <ScrollView style={{padding:10}}>
               <View style={{alignItems:'center'}}>
-                <Image source={require('../../assets/logo1.png')} style={{width:'80%',height:120}}/>
+              <Image source={require('../../assets/en_logo.png')} style={{width:200,height:200,borderRadius:300}}/>
               </View>
               <CountrySelector />
               <AisInput attr={{field:'phoneNumber',icon:{name:'phone',type:'Feather',min:5,color:'green'},keyboardType:'phone-pad',placeholder:'Mobile Number',color:'#009387',handleChange}} />

@@ -25,7 +25,7 @@ const AisInput = memo((props) => {
                             attr.handleChange(attr.field,val)
                         }}
                         secureTextEntry={attr.field === "password" ? showPassword : false}
-                        style={{borderColor:'#fff',fontFamily:fontFamilyObj.fontLight,fontSize:14,color:'#757575'}}
+                        style={{borderColor:'#fff',fontFamily:fontFamilyObj.fontBold,fontSize:14,color:'#757575'}}
                     />
                 </Col>
                 <Col size={0.15} style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>

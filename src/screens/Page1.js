@@ -84,7 +84,7 @@ const PageContent = ({navigation}) =>{
                                     return(
                                         <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
                                             navigation.navigate("SearchedContent",data)
-                                            //alert(data.title)
+                                            setApiSearch(null)
                                         }}>
                                             <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{data.title}</Text>
                                             <AntDesign name='right' color={"#757575"} size={18}></AntDesign>

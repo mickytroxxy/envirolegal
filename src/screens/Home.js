@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AisInput from '../components/forms/AisInput';
 
 import { AntDesign, Ionicons, Feather, FontAwesome } from "@expo/vector-icons";
-import { createData, loginApi } from '../context/Api';
+import { createData, loginApi, searchApi } from '../context/Api';
 let PARALLAX_HEIGHT = 0;
 const KeyRef = ({navigation}) =>{
     const {height} = Dimensions.get("screen");
@@ -45,7 +45,7 @@ const HeaderSection = () =>{
     },[])
     return(
         <View style={{backgroundColor:"#A2DDF3",height:600}}>
-            <ImageBackground source={require('../../assets/bg3.png')} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={require('../../assets/bg2.jpg')} resizeMode="cover" style={styles.image}>
             
             </ImageBackground>
         </View>
@@ -53,7 +53,7 @@ const HeaderSection = () =>{
 }
 const Foreground = (props) =>{
     const {navigation} = props;
-    const {appState : {fontFamilyObj:{fontLight},contentInfo,setAboutHeader}} = useContext(AppContext);
+    const {appState : {apiSearch,setApiSearch,fontFamilyObj:{fontLight,fontBold},contentInfo,setAboutHeader}} = useContext(AppContext);
     const [searchResults,setSearchResults] = useState([]);
     const [showSearchBoard,setSearchBoard]=useState(false);
     const [keyWord,setKeyWord] = useState("");
@@ -70,7 +70,7 @@ const Foreground = (props) =>{
                 <TouchableOpacity style={{flex:1}} onPress={() => navigation.navigate("Profile")}>
                   <Feather name="user" size={36} color="white"></Feather>
                 </TouchableOpacity>
-                <TouchableOpacity style={{flex:1}} onPress={()=> setSearchBoard(!showSearchBoard)}>
+                <TouchableOpacity style={{flex:1}} onPress={()=> navigation.navigate("Search")}>
                   <Feather name="search" size={36} color="white"></Feather>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
@@ -81,16 +81,26 @@ const Foreground = (props) =>{
                 <View style={styles.searchBoard}>
                     <View style={{width:'100%'}}>
                         <AisInput attr={{field:'search',icon:{name:'search',type:'Feather',min:5,color:'green'},keyboardType:null,placeholder:'Search here...',color:'#009387',handleChange:(field,value) => {
-                            if(value.length > 1){
-                                setSearchResults(contentInfo.filter(item => JSON.stringify(item).toUpperCase().includes(value.toUpperCase())))
-                                setKeyWord(value)
+                            // if(value.length > 1){
+                            //     setSearchResults(contentInfo.filter(item => JSON.stringify(item).toUpperCase().includes(value.toUpperCase())))
+                            //     setKeyWord(value)
+                            // }else{
+                            //     setSearchResults([])
+                            // }
+                            if(value.length > 2){
+                                searchApi(value,(response) => {
+                                    if(response && !JSON.stringify(response).includes('AxiosError')){
+                                        setApiSearch(response)
+                                        //console.log(response.data)
+                                    }
+                                })
                             }else{
-                                setSearchResults([])
+                                setApiSearch(null)
                             }
                         }}} />
                     </View>
                     <ScrollView style={{width:'100%'}} showsVerticalScrollIndicator={false}>
-                        {searchResults.length > 0 && searchResults.map((item,i) => {
+                        {/* {searchResults.length > 0 && searchResults.map((item,i) => {
                             if(item.list){
                                 return item.list.map((item,i) => {
                                     if(item.list){
@@ -131,7 +141,26 @@ const Foreground = (props) =>{
                                     </TouchableOpacity>
                                 )
                             }
-                        })}        
+                        })}         */}
+
+                        {apiSearch && apiSearch?.data.map((item,i) => 
+                            {
+                                const data = JSON.parse(item)
+                                console.log(apiSearch.length)
+                                if(data.title !== undefined ){
+                                    return(
+                                        <TouchableOpacity key={i} style={{marginTop:10,flexDirection:'row'}} onPress={()=>{
+                                            navigation.navigate("SearchedContent",data)
+                                            setApiSearch(null)
+                                            setSearchBoard(false)
+                                        }}>
+                                            <Text style={{fontFamily:fontBold,fontSize:14,flex:1}}>{data.title}</Text>
+                                            <AntDesign name='right' color={"#757575"} size={18}></AntDesign>
+                                        </TouchableOpacity>
+                                    )
+                                }
+                            }
+                        )}
                     </ScrollView>
                 </View>
             }
@@ -155,15 +184,16 @@ const BodySection = (props) =>{
             <View style={{flexDirection:'row',alignContent:'center',alignItems:'center',display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',flexWrap: 'wrap'}}>
                 {btns.map((btn,i) => {
                     return(
-                        <TouchableOpacity onPress={()=>on_btn_pressed(btn)} key={i} style={{backgroundColor:'#2277BA',width:'48%',borderRadius:20,alignContent:'center',alignItems:'center',justifyContent:'center',padding:5,minHeight:120,marginTop:10}}>
+                        <TouchableOpacity onPress={()=>on_btn_pressed(btn)} key={i} style={{backgroundColor:'rgba(0, 0, 0, 0.7)',width:'48%',borderRadius:20,alignContent:'center',alignItems:'center',justifyContent:'center',padding:5,minHeight:120,marginTop:10}}>
                             {render_btn_icons(btn)}
                             <Text style={{fontFamily:fontFamilyObj.fontBold,color:'#fff',textAlign:'center'}}>{btn}</Text>
                         </TouchableOpacity>
                     )
                 })}
             </View>
-            <View  style={{alignContent:'center',alignItems:'center', alignItems: 'center'}}>
-                <Image source={require('../../assets/logo1.png')} style={{width:'80%',height:120}}/>
+            <View  style={{alignContent:'center',alignItems:'center', alignItems: 'center',marginTop:20}}>
+                <Text style={{fontFamily:fontFamilyObj.fontNew,fontSize:28}}>ENVIRO LEGAL APP</Text>
+                <Image source={require('../../assets/en_logo.png')} style={{width:200,height:200,borderRadius:200}}/>
             </View>
         </LinearGradient>
     )
@@ -171,17 +201,17 @@ const BodySection = (props) =>{
 
 const render_btn_icons = btn =>{
   if(btn === 'About App'){
-    return <AntDesign size={60} name="infocirlceo" color="rgba(0, 0, 0, 0.7)" />
+    return <AntDesign size={60} name="infocirlceo" color="#fff" />
   }else if(btn === 'Key Obligations'){
-    return <FontAwesome name='sort-alpha-asc' color='rgba(0, 0, 0, 0.7)' size={60} />
+    return <FontAwesome name='sort-alpha-asc' color='#fff' size={60} />
   }else if(btn === 'Weekly Updates'){
-    return <Ionicons name='notifications-outline' color='rgba(0, 0, 0, 0.7)' size={60} />
+    return <Ionicons name='notifications-outline' color='#fff' size={60} />
   }else if(btn === 'Submit Question'){
-    return <AntDesign name='questioncircleo' color='rgba(0, 0, 0, 0.7)' size={60} />
+    return <AntDesign name='questioncircleo' color='#fff' size={60} />
   }else if(btn === 'Practical Help'){
-    return <Feather name='target' color='#rgba(0, 0, 0, 0.7)' size={60} />
+    return <Feather name='target' color='#fff' size={60} />
   }else if(btn === 'Hot Topics'){
-    return <FontAwesome name='lightbulb-o' color='rgba(0, 0, 0, 0.7)' size={60} />
+    return <FontAwesome name='lightbulb-o' color='#fff' size={60} />
   }
 }
 const styles = StyleSheet.create({
@@ -238,7 +268,7 @@ const styles = StyleSheet.create({
     image: {
         justifyContent: "center",
         backgroundColor:'#A2DDF3',width:'100%',
-        height:Platform.OS === 'ios' ? 380 : 320,
+        height:Platform.OS === 'ios' ? 420 : 330,
         alignItems:'center',
         alignContent:'center',
         justifyContent:'center'

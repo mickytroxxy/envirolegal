@@ -28,7 +28,7 @@ const PageContent = ({navigation}) =>{
     return(
         <View style={styles.container}>
             <View style={{marginBottom:30}}>
-                <View style={{backgroundColor:'#48933F',padding:20,borderRadius:10}}><Text style={{fontFamily:fontBold,color:'#fff'}}>{accountInfo?.firstname}</Text></View>
+                <View style={{backgroundColor:'#2277BA',padding:20,borderRadius:10}}><Text style={{fontFamily:fontBold,color:'#fff'}}>{accountInfo?.firstname}</Text></View>
                 <TouchableOpacity style={{flexDirection:'row',marginTop:15,borderBottomColor:'#757575',borderBottomWidth:0.5,padding:10,marginBottom:10}}>
                     <View style={{flex:1}}><Feather name='twitter' color='#757575' size={34} /></View>
                     <View style={{alignItems:'center',alignContent:'center',justifyContent:'center'}}><Text style={{fontFamily:fontBold}}> TWITTER</Text></View>
